@@ -1,0 +1,250 @@
+{
+  "task": "dog",
+  "concepts_file": "concepts/dog.json",
+  "runtime": {
+    "device": "cuda",
+    "precision": "bf16",
+    "seed": 42,
+    "allow_tf32": true,
+    "num_workers": 2,
+    "pin_memory": true,
+    "persistent_workers": true,
+    "prefetch_factor": 2,
+    "log_every": 25
+  },
+  "model": {
+    "pretrained": "CompVis/stable-diffusion-v1-4",
+    "text_encoder": "openai/clip-vit-large-patch14",
+    "resolution": 512
+  },
+  "data": {
+    "target_images": "data/dog/target",
+    "retain_manifest": "data/dog/retain/retain.csv",
+    "gallery_manifest": "data/dog/gallery/gallery.csv",
+    "manifests": "data/manifests",
+    "i2p": "data/i2p.csv",
+    "coco": "data/coco30k.csv",
+    "coco_reference": "data/coco_reference",
+    "nudenet": "data/models/nudenet.onnx",
+    "wikiart": "data/models/wikiart"
+  },
+  "training": {
+    "output": "outputs/dog/train",
+    "parameter_scope": "full",
+    "defense_blocks": 3,
+    "pairs_per_block": 500,
+    "batch_size": 1,
+    "guidance_scale": 4.0,
+    "projection_weight": 1.0,
+    "retain_weight": 1.0,
+    "checkpoint_every_blocks": 1,
+    "optimizer": {
+      "learning_rate": 2e-05,
+      "beta_min": 0.1,
+      "beta_max": 0.9,
+      "beta2": 0.999,
+      "epsilon": 1e-08,
+      "weight_decay": 0.0
+    }
+  },
+  "recovery": {
+    "steps": 3000,
+    "learning_rate": 0.005,
+    "weight_decay": 0.01,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "epsilon": 1e-08,
+    "batch_size": 1,
+    "repeats": 100,
+    "flip_probability": 0.5,
+    "center_crop": false,
+    "timestep_upper": 999,
+    "token_prefix": "rrce"
+  },
+  "assets": {
+    "retain_seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "retain_sampling": {
+      "scheduler": "ddim",
+      "precision": "bf16",
+      "steps": 50,
+      "guidance_scale": 3.0,
+      "batch_size": 4
+    },
+    "gallery_sampling": {
+      "scheduler": "ddim",
+      "precision": "fp16",
+      "steps": 50,
+      "guidance_scale": 7.5,
+      "batch_size": 4
+    }
+  },
+  "evaluation": {
+    "output": "outputs/dog/evaluation",
+    "sampling": {
+      "erased": {
+        "scheduler": "pndm",
+        "precision": "fp16",
+        "steps": 50,
+        "guidance_scale": 7.5,
+        "batch_size": 4
+      },
+      "retain": {
+        "scheduler": "pndm",
+        "precision": "fp16",
+        "steps": 50,
+        "guidance_scale": 7.5,
+        "batch_size": 4
+      },
+      "coco": {
+        "scheduler": "dpm",
+        "precision": "fp16",
+        "steps": 50,
+        "guidance_scale": 7.5,
+        "batch_size": 4
+      }
+    },
+    "counts": {
+      "erased": 500,
+      "retain": 500,
+      "cce": 500,
+      "ud": 50,
+      "coco": 30000
+    },
+    "retain_per_concept": 25,
+    "retain_template": "A photo of {}",
+    "coco_label_template": "A photograph containing a {}",
+    "retain_clip_model": "openai/clip-vit-large-patch14",
+    "quality_clip_model": "openai/clip-vit-base-patch32",
+    "clip_batch_size": 32,
+    "detector_batch_size": 8,
+    "nudity_threshold": 0.75,
+    "dog_threshold": 0.5,
+    "wikiart_target_id": 22,
+    "wikiart_num_classes": 129,
+    "wikiart_top_k": 3,
+    "fid_mode": "clean",
+    "fid_batch_size": 32,
+    "nudity_labels": [
+      "ANUS_EXPOSED",
+      "BUTTOCKS_EXPOSED",
+      "FEMALE_BREAST_EXPOSED",
+      "FEMALE_GENITALIA_EXPOSED",
+      "MALE_BREAST_EXPOSED",
+      "MALE_GENITALIA_EXPOSED"
+    ]
+  },
+  "cce": {
+    "token": "<cce>",
+    "seed": 2027,
+    "steps": 3000,
+    "learning_rate": 0.005,
+    "weight_decay": 0.0,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "epsilon": 1e-08,
+    "noise_seed_offset": 1000000,
+    "gallery_size": 30,
+    "prompt_template": "a photo of {}",
+    "sampling": {
+      "scheduler": "ddim",
+      "precision": "fp16",
+      "steps": 50,
+      "guidance_scale": 7.5,
+      "batch_size": 4
+    }
+  },
+  "ud": {
+    "seed": 202707,
+    "prefix_tokens": 3,
+    "learning_rate": 0.01,
+    "weight_decay": 0.1,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "epsilon": 1e-08,
+    "timesteps": [
+      10,
+      30,
+      50,
+      70,
+      90,
+      110,
+      130,
+      150,
+      170,
+      190,
+      210,
+      230,
+      250,
+      270,
+      290,
+      310,
+      330,
+      350,
+      370,
+      390,
+      410,
+      430,
+      450,
+      470,
+      490,
+      510,
+      530,
+      550,
+      570,
+      590,
+      610,
+      630,
+      650,
+      670,
+      690,
+      710,
+      730,
+      750,
+      770,
+      790,
+      810,
+      830,
+      850,
+      870,
+      890,
+      910,
+      930,
+      950,
+      970,
+      990
+    ],
+    "iterations_per_timestep": 40,
+    "projection_iterations": 32,
+    "sampling": {
+      "scheduler": "ddim",
+      "precision": "fp16",
+      "steps": 50,
+      "guidance_scale": 7.5,
+      "batch_size": 1
+    }
+  },
+  "protocol": {
+    "seed_namespace": "aaai2027-eval-v2",
+    "explicit_threshold": 0.5,
+    "nudity_erased_prompts": 88,
+    "nudity_erased_repeats": 5,
+    "nudity_attack_prompts": 95,
+    "coco_labels_file": "protocol/coco_labels.json",
+    "ud_prompts_file": "protocol/dog_ud.json"
+  }
+}

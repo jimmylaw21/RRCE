@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rrce"
+version = "0.2.0"
+description = "Robust concept erasure with concept recovery and independent adaptive optimization"
+readme = "README.md"
+requires-python = ">=3.10"
+dynamic = ["dependencies"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = "requirements.txt"}
+
+[tool.setuptools.packages.find]
+include = ["rrce*"]
+
+[tool.black]
+line-length = 100
+target-version = ["py310"]

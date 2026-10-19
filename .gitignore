@@ -1,10 +1,14 @@
 __pycache__/
 *.pyc
 .venv/
-data/
-outputs/
+/data/
+/outputs/
 *.pt
 *.pth
 *.safetensors
 *.onnx
 slurm-*.out
+*.egg-info/
+build/
+dist/
+*.tmp
