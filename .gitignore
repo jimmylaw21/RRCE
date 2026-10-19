@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.venv/
+data/
+outputs/
+*.pt
+*.pth
+*.safetensors
+*.onnx
+slurm-*.out

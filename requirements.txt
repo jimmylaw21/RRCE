@@ -1,0 +1,11 @@
+torch>=2.2
+torchvision>=0.17
+diffusers==0.30.1
+transformers==4.46.2
+accelerate==1.12.0
+numpy
+pillow
+tqdm
+nudenet==3.4.2
+onnxruntime
+clean-fid==0.1.35
